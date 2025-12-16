@@ -27,7 +27,7 @@ interface ApiError {
   };
   message?: string;
 }
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://13.232.253.1/';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://13.232.253.1';
 
 export default function Chat() {
   // We no longer need a list of tenants, just the single one for the user
