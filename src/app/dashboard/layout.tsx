@@ -73,7 +73,7 @@ interface ApiError {
 }
 
 // --- CONFIGURATION ---
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://13.232.253.1/';
 const APP_TITLE = 'RAG CHAT';
 
 // --- CUSTOM STYLES ---
