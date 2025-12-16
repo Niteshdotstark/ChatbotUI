@@ -310,7 +310,7 @@ export default function AuthForm({ type }: AuthFormProps) {
                   placeholder="Address"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  className="bg-gray  w-full px-4 py-3 border-2 border-light rounded-5 transition-colors text-lg"
+                  className="bg-gray w-full px-4 py-3 border-2 border-light rounded-5 transition-colors text-lg"
                   rows={3}
                 />
               </div>

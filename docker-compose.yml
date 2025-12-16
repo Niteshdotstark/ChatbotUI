@@ -30,6 +30,6 @@ services:
     container_name: rag-admin-frontend
     environment:
       # This URL now points to the public domain of your backend server
-      - NEXT_PUBLIC_API_URL=https://demoapi.ant24.ai
+      - NEXT_PUBLIC_API_URL=http://13.232.253.1
     expose:
       - "3000"
