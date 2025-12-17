@@ -73,7 +73,7 @@ interface ApiError {
 }
 
 // --- CONFIGURATION ---
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://13.232.253.1';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 const APP_TITLE = 'RAG CHAT';
 
 // --- CUSTOM STYLES ---
@@ -1036,7 +1036,7 @@ export default function DashboardLayout({
                 {/* NEW: Mobile Overlay for Sidebar */}
                 {isSidebarOpen && (
                     <div
-                        className="fixed inset-0  z-40 lg:hidden"
+                   
                         onClick={toggleSidebar}
                     />
                 )}
@@ -1051,7 +1051,7 @@ export default function DashboardLayout({
                     ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
                 `} style={{ height: '100%' }}>
                     <div className="p-6 flex-1 flex flex-col mt-5 mt-lg-0">
-                        <div className="space-y-2 mt-4">
+                        <div className="space-y-2 mt-5 mt-lg-4">
                             <Link href="/dashboard" onClick={toggleSidebar} className={`nav-link-style ${pathname === '/dashboard' ? 'active' : 'text-secondary hover:text-white'}`}>
                                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" /></svg>
                                 <span className="nav-link-text">DASHBOARD</span>
