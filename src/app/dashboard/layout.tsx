@@ -395,11 +395,11 @@ export default function DashboardLayout({
             try {
                 setIsLoading(true);
                 const token = localStorage.getItem('token');
-                // if (!token) {
-                //     setError('Authentication token not found. Redirecting to login.');
-                //     router.push('/login');
-                //     return;
-                // }
+                if (!token) {
+                    setError('Authentication token not found. Redirecting to login.');
+                    router.push('/login');
+                    return;
+                }
 
                 const [tenantsRes, countRes, knowledgeCountRes, activityRes] =
                     await Promise.all([
@@ -691,7 +691,7 @@ export default function DashboardLayout({
                 },
             );
             // Refresh tenants list
-            const tenantsRes = await axios.get(`${API_URL}/tenants`, {
+            const tenantsRes = await axios.get(`${API_URL}/tenants/`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setTenants(tenantsRes.data);

@@ -84,9 +84,16 @@ export default function AuthForm({ type }: AuthFormProps) {
     },
     onError: (err: any) => {
       const detail = err.response?.data?.detail;
+      const isLogin = type === 'login';
 
+      // 1. Handle 401 Unauthorized specifically (Common for Login)
+      if (err.response?.status === 401) {
+        setError('Invalid email or password. Please try again.');
+        return;
+      }
+
+      // 2. Handle 422 Validation Errors (Common for Registration/Pydantic)
       if (Array.isArray(detail)) {
-        // This handles Pydantic validation errors (like weak password, invalid email)
         const passwordErrors = detail
           .filter((d: any) => d.loc && d.loc.includes('password'))
           .map((d: any) => d.msg);
@@ -102,10 +109,18 @@ export default function AuthForm({ type }: AuthFormProps) {
         } else {
           setError(detail.map((d: any) => d.msg).join('. '));
         }
-      } else if (typeof detail === 'string') {
-        setError(detail); // e.g., "Email already registered"
-      } else {
-        setError('Registration failed. Please check your input.');
+      } 
+      // 3. Handle String Errors (e.g., "Email already registered")
+      else if (typeof detail === 'string') {
+        setError(detail);
+      } 
+      // 4. Fallback Generic Errors
+      else {
+        setError(
+          isLogin 
+            ? 'Login failed. Please check your credentials.' 
+            : 'Registration failed. Please check your input.'
+        );
       }
     },
   });
@@ -236,41 +251,47 @@ export default function AuthForm({ type }: AuthFormProps) {
           {/* Password Field with Strength Validation */}
           <div className='mb-3'>
             <label htmlFor="auth-password" className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">
-              Password <span className="text-red-500">*</span>
+              Password
             </label>
             <input
               type="password"
               id="auth-password"
-              placeholder="Enter strong password"
+              placeholder={isRegister ? "Enter strong password" : "Enter your password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className={`bg-gray w-full px-4 py-3 border-2 rounded-5 transition-colors text-lg ${password && !isPasswordValid(password)
-                ? 'border-red-500 focus:border-red-600'
-                : 'border-light focus:border-dotstark-primary'
-                }`}
+              className={`bg-gray w-full px-4 py-3 border-2 rounded-5 transition-colors text-lg ${
+                // ONLY show red border on invalid password if we are REGISTERING
+                isRegister && password && !isPasswordValid(password)
+                  ? 'border-red-500 focus:border-red-600'
+                  : 'border-light focus:border-dotstark-primary'
+              }`}
               required
             />
 
-            {/* Live Password Strength Feedback */}
-            {password && !isPasswordValid(password) && (
-              <div className="mt-2 text-sm text-red-600 space-y-1">
-                <p>Password must contain:</p>
-                <ul className="list-disc list-inside text-xs">
-                  {!/.{8,}/.test(password) && <li>At least 8 characters</li>}
-                  {!/[A-Z]/.test(password) && <li>One uppercase letter (A-Z)</li>}
-                  {!/[a-z]/.test(password) && <li>One lowercase letter (a-z)</li>}
-                  {!/[0-9]/.test(password) && <li>One number (0-9)</li>}
-                </ul>
-              </div>
-            )}
+            {/* Live Password Strength Feedback - ONLY visible during Registration */}
+            {isRegister && (
+              <>
+                {password && !isPasswordValid(password) && (
+                  <div className="mt-2 text-sm text-red-600 space-y-1">
+                    <p>Password must contain:</p>
+                    <ul className="list-disc list-inside text-xs">
+                      {!/.{8,}/.test(password) && <li>At least 8 characters</li>}
+                      {!/[A-Z]/.test(password) && <li>One uppercase letter (A-Z)</li>}
+                      {!/[a-z]/.test(password) && <li>One lowercase letter (a-z)</li>}
+                      {!/[0-9]/.test(password) && <li>One number (0-9)</li>}
+                    </ul>
+                  </div>
+                )}
 
-            {password && isPasswordValid(password) && (
-              <p className="mt-2 text-sm text-green-600 flex items-center">
-                <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                Strong password!
-              </p>
+                {password && isPasswordValid(password) && (
+                  <p className="mt-2 text-sm text-green-600 flex items-center">
+                    <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    Strong password!
+                  </p>
+                )}
+              </>
             )}
           </div>
 
