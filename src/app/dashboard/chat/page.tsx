@@ -54,8 +54,8 @@ export default function ChatPage() {
                         chatMessages.map((message) => (
                             <div
                                 key={message.id}
-                                className={`flex ${message.isUser ? 'justify-end' : 'justify-start'
-                                    }`}
+                                className={`flex ${message.isUser ? 'justify-end' : 'justify-start' 
+                                    } my-5`}
                             >
                                 <div
                                     className={`max-w-[85%] sm:max-w-[70%] p-3 rounded-lg ${message.isUser
